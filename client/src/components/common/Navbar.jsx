@@ -7,11 +7,9 @@ import {
   FaTimes,
   FaHome,
   FaTachometerAlt,
-  // FaSignInAlt, // Ejemplo si quisieras importarlo
-  // FaUserPlus,  // Ejemplo si quisieras importarlo
 } from 'react-icons/fa';
 import { IoMenu } from 'react-icons/io5';
-import useAuth from '../../hooks/useAuth'; // Asegúrate que la ruta al hook sea correcta
+import useAuth from '../../hooks/useAuth';
 
 const Navbar = () => {
   const { user, token, logout } = useAuth();
@@ -20,7 +18,6 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
 
   // --- EFECTOS ---
-
   // Detectar scroll para cambiar la apariencia de la navbar
   useEffect(() => {
     const handleScroll = () => {
@@ -43,7 +40,6 @@ const Navbar = () => {
   }, [isMobileMenuOpen]);
 
   // --- CLASES CSS DINÁMICAS ---
-
   // Clases para NavLink de escritorio
   const navLinkClasses = ({ isActive }) =>
     `flex items-center space-x-2 px-3 py-1 rounded-md text-sm font-medium transition-all duration-200 ${
@@ -61,7 +57,6 @@ const Navbar = () => {
     }`;
 
   // --- MANEJADORES DE EVENTOS ---
-
   // Cerrar sesión
   const handleLogout = () => {
     logout();
@@ -78,115 +73,114 @@ const Navbar = () => {
 
   // --- RENDERIZADO DEL COMPONENTE ---
   return (
-    <motion.nav
-      // Barra de navegación principal (sticky, con z-index base)
-      className={`sticky top-0 w-full z-50 transition-all duration-200 ${ // z-50 para la barra principal
-        scrolled
-          ? 'bg-slate-700/95 backdrop-blur-md shadow-lg'
-          : 'bg-slate-700'
-      }`}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-    >
-      {/* Contenedor principal de la barra */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-14">
-
-          {/* Logo/Brand */}
-          <div className="flex-shrink-0">
-            <Link
-              to="/"
-              className="flex items-center space-x-2 text-lg font-bold"
-              onClick={closeMobileMenu} // Cierra menú si se hace clic en logo (útil en móvil)
-            >
-              <svg
-                className="h-6 w-6 text-blue-300"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-              </svg>
-              <span className="text-blue-200">NASA APOD</span>
-            </Link>
-          </div>
-
-          {/* Links Desktop (ocultos en móvil) */}
-          <div className="hidden md:flex items-center space-x-1">
-            <NavLink to="/" className={navLinkClasses} end>
-              <FaHome className="text-lg" />
-              <span>Inicio</span>
-            </NavLink>
-
-            {/* Links si está autenticado */}
-            {isAuthenticated && (
-              <>
-                <NavLink to="/dashboard" className={navLinkClasses}>
-                  <FaTachometerAlt className="text-lg" />
-                  <span>Dashboard</span>
-                </NavLink>
-                <NavLink to="/profile/edit" className={navLinkClasses}>
-                  <FaUserCircle className="text-lg" />
-                  <span>Perfil</span>
-                </NavLink>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center space-x-2 px-3 py-1 rounded-md text-sm font-medium text-red-300 hover:bg-red-900/20 hover:text-red-200 transition-all duration-200"
+    <>
+      {/* Hacemos esto como un header en vez de nav para mejor semántica */}
+      <header className="h-14"> {/* Espacio para el navbar fijo */}
+        <motion.nav
+          // Barra de navegación principal con z-index alto
+          className={`fixed top-0 left-0 right-0 w-full z-40 transition-all duration-200 ${
+            scrolled
+              ? 'bg-slate-700/95 backdrop-blur-md shadow-lg'
+              : 'bg-slate-700'
+          }`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          {/* Contenedor principal de la barra */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-14">
+              {/* Logo/Brand */}
+              <div className="flex-shrink-0">
+                <Link
+                  to="/"
+                  className="flex items-center space-x-2 text-lg font-bold"
+                  onClick={closeMobileMenu}
                 >
-                  <FaSignOutAlt className="text-lg" />
-                  <span>Salir</span>
+                  <svg
+                    className="h-6 w-6 text-blue-300"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                  </svg>
+                  <span className="text-blue-200">NASA APOD</span>
+                </Link>
+              </div>
+              {/* Links Desktop (ocultos en móvil) */}
+              <div className="hidden md:flex items-center space-x-1">
+                <NavLink to="/" className={navLinkClasses} end>
+                  <FaHome className="text-lg" />
+                  <span>Inicio</span>
+                </NavLink>
+                {/* Links si está autenticado */}
+                {isAuthenticated && (
+                  <>
+                    <NavLink to="/dashboard" className={navLinkClasses}>
+                      <FaTachometerAlt className="text-lg" />
+                      <span>Dashboard</span>
+                    </NavLink>
+                    <NavLink to="/profile/edit" className={navLinkClasses}>
+                      <FaUserCircle className="text-lg" />
+                      <span>Perfil</span>
+                    </NavLink>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center space-x-2 px-3 py-1 rounded-md text-sm font-medium text-red-300 hover:bg-red-900/20 hover:text-red-200 transition-all duration-200"
+                    >
+                      <FaSignOutAlt className="text-lg" />
+                      <span>Salir</span>
+                    </button>
+                    <div className="flex items-center ml-2 px-3 py-1 rounded-md bg-indigo-600/20 text-sm text-blue-100">
+                      <span className="mr-1">•</span>
+                      <span>{user?.name || "Usuario"}</span>
+                    </div>
+                  </>
+                )}
+                {/* Links si NO está autenticado */}
+                {!isAuthenticated && (
+                  <>
+                    <NavLink to="/login" className={navLinkClasses}>
+                      <FaUserCircle className="text-lg" />
+                      <span>Iniciar sesión</span>
+                    </NavLink>
+                    <NavLink to="/register" className={navLinkClasses}>
+                      <FaUserCircle className="text-lg" />
+                      <span>Registrar</span>
+                    </NavLink>
+                  </>
+                )}
+              </div>
+              {/* Botón Menú Móvil (visible solo en móvil) */}
+              <div className="md:hidden">
+                <button
+                  onClick={toggleMobileMenu}
+                  className="inline-flex items-center justify-center p-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200"
+                  aria-label="Abrir menú principal"
+                >
+                  <IoMenu className="h-5 w-5" aria-hidden="true" />
                 </button>
-                <div className="flex items-center ml-2 px-3 py-1 rounded-md bg-indigo-600/20 text-sm text-blue-100">
-                  <span className="mr-1">•</span>
-                  <span>{user?.name || "Usuario"}</span>
-                </div>
-              </>
-            )}
-
-            {/* Links si NO está autenticado */}
-            {!isAuthenticated && (
-              <>
-                <NavLink to="/login" className={navLinkClasses}>
-                  <FaUserCircle className="text-lg" /> {/* O usa FaSignInAlt */}
-                  <span>Iniciar sesión</span>
-                </NavLink>
-                <NavLink to="/register" className={navLinkClasses}>
-                  <FaUserCircle className="text-lg" /> {/* O usa FaUserPlus */}
-                  <span>Registrar</span>
-                </NavLink>
-              </>
-            )}
+              </div>
+            </div>
           </div>
-
-          {/* Botón Menú Móvil (visible solo en móvil) */}
-          <div className="md:hidden">
-            <button
-              onClick={toggleMobileMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-white/80 hover:text-white hover:bg-white/10 transition-all duration-200"
-              aria-label="Abrir menú principal"
-            >
-              <IoMenu className="h-5 w-5" aria-hidden="true" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* --- Panel Menú Móvil (con z-index corregido) --- */}
+        </motion.nav>
+      </header>
+      
+      {/* --- Panel Menú Móvil --- */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
             {/* Overlay (fondo semitransparente) */}
             <motion.div
-              className="fixed inset-0 bg-black/50 z-[55] md:hidden" // z-index AUMENTADO y menor que el panel
+              className="fixed inset-0 bg-black/50 z-40 md:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={closeMobileMenu}
             />
-
             {/* Panel lateral que desliza */}
             <motion.div
-              className="fixed top-0 left-0 h-full w-3/4 max-w-xs bg-slate-800 z-[60] md:hidden overflow-y-auto" // z-index AUMENTADO para estar sobre todo
+              className="fixed top-0 left-0 h-full w-3/4 max-w-xs bg-slate-800 z-50 md:hidden overflow-y-auto"
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
@@ -216,7 +210,6 @@ const Navbar = () => {
                   <FaTimes className="h-5 w-5" />
                 </button>
               </div>
-
               {/* Contenido/Links del menú móvil */}
               <div className="p-2 space-y-1">
                 {isAuthenticated && (
@@ -225,12 +218,10 @@ const Navbar = () => {
                     <span>{user?.name || "Usuario"}</span>
                   </div>
                 )}
-
                 <NavLink to="/" className={mobileNavLinkClasses} end onClick={closeMobileMenu}>
                   <FaHome className="text-xl text-blue-300" />
                   <span>Inicio</span>
                 </NavLink>
-
                 {isAuthenticated ? (
                   <>
                     <NavLink to="/dashboard" className={mobileNavLinkClasses} onClick={closeMobileMenu}>
@@ -266,7 +257,7 @@ const Navbar = () => {
           </>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </>
   );
 };
 

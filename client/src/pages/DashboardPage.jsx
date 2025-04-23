@@ -168,7 +168,7 @@ const DashboardPage = () => {
               variant="secondary" 
               className="w-full py-3 flex items-center justify-center rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 transition-colors duration-150"
             >
-              Rovers de Marte
+              Rovers de Marte (Solo visual)
             </Button>
           </Link>
         </div>

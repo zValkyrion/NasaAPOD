@@ -7,7 +7,7 @@ const MainLayout = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      {/* El contenido principal de la página se renderiza aquí */}
+      {/* El contenido principal comienza después del espacio del navbar */}
       <main className="flex-grow container mx-auto px-4 py-8">
         <Outlet />
       </main>

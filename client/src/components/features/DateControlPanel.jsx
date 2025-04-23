@@ -14,7 +14,7 @@ const DateControlPanel = ({
     viewHistory,
     formatDate,
     onNavigateDay,
-    onDateChange, // Asegúrate de que esta función ahora espera un objeto Date
+    onDateChange,
     onGoToToday,
     onToggleHistory,
     onSelectHistoryDate,
@@ -24,23 +24,18 @@ const DateControlPanel = ({
 
     const handleDateInputChange = (e) => {
         const dateString = e.target.value; // p.ej., "2024-05-05"
-
-        // --- INICIO DE LA CORRECCIÓN ---
         if (dateString) {
             // Dividimos el string para obtener año, mes y día como números
             const parts = dateString.split('-').map(Number);
             const year = parts[0];
             const month = parts[1]; // El mes del input es 1-12
             const day = parts[2];
-
             // Creamos la fecha usando los componentes en la zona horaria local.
             // ¡Importante! El constructor Date usa mes 0-11, por eso restamos 1.
             const localDate = new Date(year, month - 1, day);
-
             // Llamamos a la función del padre con el objeto Date corregido
             onDateChange(localDate);
         }
-        // --- FIN DE LA CORRECCIÓN ---
     };
 
     const openNativeDatePicker = () => {
@@ -61,6 +56,24 @@ const DateControlPanel = ({
         return localISODate.toISOString().split('T')[0];
     }
 
+    // Función para verificar si dos fechas son el mismo día (ignora hora, minutos, etc.)
+    const isSameDay = (date1, date2) => {
+        if (typeof date1 === 'string') {
+            // Si date1 es string (formato YYYY-MM-DD), convertirlo a objeto Date
+            const parts = date1.split('-').map(Number);
+            date1 = new Date(parts[0], parts[1] - 1, parts[2]);
+        }
+        
+        if (typeof date2 === 'string') {
+            // Si date2 es string (formato YYYY-MM-DD), convertirlo a objeto Date
+            const parts = date2.split('-').map(Number);
+            date2 = new Date(parts[0], parts[1] - 1, parts[2]);
+        }
+        
+        return date1.getFullYear() === date2.getFullYear() &&
+               date1.getMonth() === date2.getMonth() &&
+               date1.getDate() === date2.getDate();
+    }
 
     return (
         <motion.div
@@ -79,43 +92,36 @@ const DateControlPanel = ({
                     >
                         <ChevronLeftIcon className="h-5 w-5 text-gray-600" />
                     </button>
-
                     <div className="relative">
                         <button
                             onClick={openNativeDatePicker}
                             className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-md hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
                         >
                             <CalendarDaysIcon className="h-5 w-5 text-gray-500" />
-                            {/* Asegúrate que formatDate funcione bien con el objeto Date */}
                             <span className="font-medium">{formatDate(selectedDate)}</span>
                         </button>
-
                         {/* Input oculto que abre el datepicker nativo */}
                         <input
                             type="date"
                             ref={dateInputRef}
-                            // Usamos la función helper para asegurar el formato YYYY-MM-DD local
                             value={getLocalDateString(selectedDate)}
                             onChange={handleDateInputChange}
-                            max={todayString} // Asegúrate que todayString también esté en YYYY-MM-DD
+                            max={todayString}
                             className="absolute opacity-0 pointer-events-none w-0 h-0"
                             style={{ top: '-10px', left: '-10px' }} // Moverlo fuera de la vista
                         />
                     </div>
-
                     <button
                         onClick={() => onNavigateDay(1)}
                         className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
-                           // La comparación puede necesitar ajuste si todayString es YYYY-MM-DD y selectedDate es Date
-                           getLocalDateString(selectedDate) === todayString ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600'
+                           isSameDay(selectedDate, todayString) ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600'
                         }`}
-                        disabled={getLocalDateString(selectedDate) === todayString}
+                        disabled={isSameDay(selectedDate, todayString)}
                         aria-label="Ver día siguiente"
                     >
                         <ChevronRightIcon className="h-5 w-5" />
                     </button>
                 </div>
-
                 {/* Botones de acción */}
                 <div className="flex space-x-2">
                     <button
@@ -125,7 +131,6 @@ const DateControlPanel = ({
                         <ArrowPathIcon className="h-4 w-4" />
                         <span>Hoy</span>
                     </button>
-
                     <button
                         onClick={onToggleHistory}
                         className="px-3 py-1.5 rounded-md bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors text-sm font-medium"
@@ -134,7 +139,6 @@ const DateControlPanel = ({
                     </button>
                 </div>
             </div>
-
             {/* Historial de fechas recientes */}
             <AnimatePresence>
                 {viewHistory && recentDates.length > 0 && (
@@ -146,23 +150,22 @@ const DateControlPanel = ({
                     >
                         <h3 className="text-sm font-medium text-gray-500 mb-2">Historial reciente:</h3>
                         <div className="flex flex-wrap gap-2">
-                            {recentDates.map(dateStr => { // Asumiendo que recentDates son strings YYYY-MM-DD
+                            {recentDates.map(dateStr => {
                                 // Convertimos el string a Date para comparación y display
                                 const dateParts = dateStr.split('-').map(Number);
                                 const historyDate = new Date(dateParts[0], dateParts[1]-1, dateParts[2]);
-                                const selectedDateStr = getLocalDateString(selectedDate); // Para comparación
-
+                                
                                 return (
                                     <button
                                         key={dateStr}
-                                        onClick={() => onSelectHistoryDate(dateStr)} // Pasar el string como antes
+                                        onClick={() => onSelectHistoryDate(dateStr)}
                                         className={`px-3 py-1 text-xs rounded-full transition-colors ${
-                                            dateStr === selectedDateStr
+                                            isSameDay(historyDate, selectedDate)
                                                 ? 'bg-primary text-black bg-blue-200'
                                                 : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                                         }`}
                                     >
-                                        {historyDate.toLocaleDateString('es-MX', { // Usamos el objeto Date local para mostrar
+                                        {historyDate.toLocaleDateString('es-MX', {
                                             day: 'numeric',
                                             month: 'short'
                                         })}
