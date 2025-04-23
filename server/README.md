@@ -13,6 +13,7 @@ El backend está construido con Node.js y Express. Se encarga de:
 
 * Registrar nuevos usuarios de forma segura
 * Autenticar usuarios existentes usando correo y contraseña
+* Eliminar usuarios existentes una vez iniciada su respectiva sesion
 * Gestionar sesiones mediante JSON Web Tokens (JWT)
 * Proteger rutas específicas para que solo usuarios autenticados puedan accederlas
 * Permitir a los usuarios ver y actualizar su información de perfil (nombre, contraseña)
