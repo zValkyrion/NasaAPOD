@@ -18,6 +18,8 @@ Este es el frontend para la aplicación NASA App, un proyecto Full Stack diseña
 * **Gestión de Sesión:** Usa JSON Web Tokens (JWT) para mantener la sesión del usuario.
 * **Rutas Protegidas:** Ciertas secciones (Dashboard, Editar Perfil) solo son accesibles para usuarios autenticados.
 * **Dashboard Personal:** Da la bienvenida al usuario autenticado.
+* **Seleccion de favoritos:** Apartado de imagenes favoritas.
+* **Historial de imagenes:** Historial de fechas recientes consultadas.
 * **Edición de Perfil:** Permite a los usuarios actualizar su nombre y contraseña.
 * **Diseño Responsivo:** Interfaz adaptable a diferentes tamaños de pantalla (móvil, tablet, escritorio).
 * **Experiencia de Usuario Mejorada:**
