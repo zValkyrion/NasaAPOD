@@ -14,7 +14,7 @@ const app = express();
 const whitelist = [
     'http://localhost:5173', // Origen de tu frontend Vite
     'http://localhost:3000',  // Origen común de Create React App (por si acaso)
-    'https://nasaapod-65ic.onrender.com/'
+    'https://nasaapod-65ic.onrender.com'
 ];
 
 const corsOptions = {
