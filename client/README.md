@@ -186,6 +186,4 @@ Este proyecto está bajo la Licencia MIT - consulta el archivo LICENSE para más
 
 ## 📧 Contacto
 
-Tu Nombre - [@tu_twitter](https://twitter.com/tu_twitter) - email@ejemplo.com
-
-Link del Proyecto: [https://github.com/yourusername/nasa-auth-app](https://github.com/yourusername/nasa-auth-app)
+Link del Proyecto: [https://github.com/</nasa-auth-app](https://github.com/zValkyrion/NasaAPOD)
